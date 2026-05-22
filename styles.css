@@ -1,1 +1,52 @@
+// Dados de produção agrícola (em milhões de toneladas)
+const dadosAgronomia = {
+    'Continente': ['América', 'Europa', 'Ásia', 'África', 'Oceania'],
+    'Trigo': [120, 200, 300, 50, 10],
+    'Milho': [150, 100, 250, 60, 5],
+    'Soja': [90, 60, 180, 30, 2]
+};
 
+// Selecionando elementos
+const selectCultura = document.getElementById('cultura');
+const ctx = document.getElementById('grafico').getContext('2d');
+
+let grafico = null;
+
+// Função para criar gráfico
+function criarGrafico(cultura) {
+    const dados = dadosAgronomia[cultura];
+
+    if (grafico) {
+        grafico.destroy(); // destrói gráfico antigo antes de criar novo
+    }
+
+    grafico = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: dadosAgronomia['Continente'],
+            datasets: [{
+                label: `Produção de ${cultura} (milhões de toneladas)`,
+                data: dados,
+                backgroundColor: 'rgba(76, 175, 80, 0.7)',
+                borderColor: 'rgba(76, 175, 80, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// Inicializa com Trigo
+criarGrafico('Trigo');
+
+// Atualiza gráfico ao mudar seleção
+selectCultura.addEventListener('change', (e) => {
+    criarGrafico(e.target.value);
+});
